@@ -2,13 +2,13 @@ const btnAddNuvUser = document.querySelector(".btnAddNuvUser");
 const conteForUserAdd = document.querySelector(".conteForUserAdd");
 /* formulrio de registar el usuario */
 const addUser = ()=>{
-    let form = `<div class="itemsInput">
+    let form = `
     <input type="text" placeholder="Nombres">
     <input type="text" placeholder="Apellidos">
     <input type="text" placeholder="Grado">
     <input type="text" placeholder="Placa">
-    <button class="btnRegistro">Registrar</button>
-</div>`;
+    <input class="btnRegistro" type="submit" value="Registrar">
+`;
 conteForUserAdd.innerHTML = form;
 ingresoInfoArr();
 }
@@ -16,7 +16,7 @@ btnAddNuvUser.addEventListener("click", addUser);
 /* leyendo los datos de entrada */
 const ingresoInfoArr = ()=>{
     let dataUser = [];
-    const itemsInput = document.querySelectorAll(".itemsInput")[0].children;
+    const itemsInput = document.querySelectorAll(".conteForUserAdd")[0].children;
     const btnRegistro = document.querySelector(".btnRegistro");
     btnRegistro.addEventListener("click", ()=>{
         for ( i in itemsInput) {
@@ -26,6 +26,7 @@ const ingresoInfoArr = ()=>{
             }
         }
         info(dataUser);
+        location.reload("index.html");
     });
 }
 /* guardando los datos en local storague (el usuario ya estaria registrado)*/

@@ -1,32 +1,33 @@
 const dataUsuarios = {
-    gr :["TC","MY"],
-    nombreYapellido :[
-        "CASTIBLANCO GONZALEZ EDWIN HERNANDO",
-        "BECERRA GUALTEROS	JHON ALEXANDER"
-    ],
-    placa :[4687,1185]
+    gr :[],
+    nombreYapellido :[],
+    placa :[]
 }; 
-
-/* class dataUsuarios{
-    constructor(gr, nombreYapellido, placa){
-        this.gr = gr;
-        this.nombreYapellido = nombreYapellido;
-        this.placa = placa;
+/* agrego los datos del local storague al objeto dataUsuarios */
+let arrUsuarios = [];
+const registrado = (valor)=>{
+    dataUsuarios.gr.push(valor[2]);
+    dataUsuarios.nombreYapellido.push(valor[0].concat(" "+valor[1]))
+    dataUsuarios.placa.push(valor[3]);
+} 
+/* me traigo los datos de local storage */
+ let cargandoLocalSt = ()=>{
+    for (let i = 1; i <= localStorage.length; i++) {
+        const datos = localStorage.getItem(`USER_${i}`);
+        arrUsuarios.push(datos);
+        let val = arrUsuarios[i-1];
+        registrado(val.split(","));
     }
-} */
-
-/* const datos = localStorage.setItem();
-console.log(localStorage.getItem("gr")); */
-
-
-
+} 
 const ingresoCode = document.querySelector(".ingreso_code");
 const mostrandoInfo = document.querySelector(".mostrandoInfo");
 /* ingresando placa de usuario y retornando un objeto con la informacion del usuario*/
 const ingreso =()=>{
+    cargandoLocalSt();
     const data = dataUsuarios.placa.filter(v => v == ingresoCode.value);
     prevInfo(data); 
     ingresoCode.value=""; 
+
 }
 
 ingresoCode.addEventListener("change", ingreso);
