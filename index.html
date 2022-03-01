@@ -4,50 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
     <title>Document</title>
 </head>
 <body>
-    
+<button class="btnAddNuvUser"><i class="fa fa-plus"></i></button>
 <input class="ingreso_code" type="text" name="" id="">
-
+<!-- tabla de ingreso de datos en codigo de barras -->
 <div class="mostrandoInfo">
-    <table border="1"></table>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>FECHA</td>
+                <td>HORA</td>
+                <td>GR</td>
+                <td>NOMBRES Y APELLIDOS</td>
+                <td>PLACA</td>
+            </tr>
+        </thead>
+    </table>
 </div>
+<!-- registrar usuario -->
+<div class="conteForUserAdd"></div>
 
+<script src="/index.js"></script>
+<script src="/formAdd.js"></script>
+<script src="https://kit.fontawesome.com/d1b4062676.js" crossorigin="anonymous"></script>
 </body>
-<script>
-const dataUsuarios = {
-    gr :["TC","MY"],
-    nombreYapellido :[
-        "CASTIBLANCO GONZALEZ EDWIN HERNANDO",
-        "BECERRA GUALTEROS	JHON ALEXANDER"
-    ],
-    placa :[4687,1185]
-};
-
-const ingresoCode = document.querySelector(".ingreso_code");
-const mostrandoInfo = document.querySelector(".mostrandoInfo");
-/* ingresando placa de usuario y retornando un objeto con la informacion del usuario*/
-const ingreso =()=>{
-    const data = dataUsuarios.placa.filter(v => v == ingresoCode.value);
-    prevInfo(data); 
-    ingresoCode.value=""; 
-}
-
-ingresoCode.addEventListener("change", ingreso);
-/* mostrado la info en el dom */
-const prevInfo = (info)=>{
-    if(info == ""){
-        alert("usuario no encontrado");
-    }else{
-        const posicion = dataUsuarios.placa.indexOf(info[0])
-        mostrandoInfo.children[0].innerHTML += `
-        <tr>
-            <td>${dataUsuarios.gr[posicion]}</td>
-            <td>${dataUsuarios.nombreYapellido[posicion]}</td>
-            <td>${dataUsuarios.placa[posicion]}</td>
-        </tr>`;
-    }
-};  
-</script>
 </html>
