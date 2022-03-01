@@ -11,8 +11,9 @@ const registrado = (valor)=>{
     dataUsuarios.placa.push(valor[3]);
 } 
 /* me traigo los datos de local storage */
+let servidorLocal = localStorage.length;
  let cargandoLocalSt = ()=>{
-    for (let i = 1; i <= localStorage.length; i++) {
+    for (let i = 1; i <= servidorLocal; i++) {
         const datos = localStorage.getItem(`USER_${i}`);
         arrUsuarios.push(datos);
         let val = arrUsuarios[i-1];
@@ -27,7 +28,6 @@ const ingreso =()=>{
     const data = dataUsuarios.placa.filter(v => v == ingresoCode.value);
     prevInfo(data); 
     ingresoCode.value=""; 
-
 }
 
 ingresoCode.addEventListener("change", ingreso);
@@ -45,7 +45,7 @@ const horaAmOpm = ()=>{
 }
 /* mostrado la info de usuario en el dom */
 const prevInfo = (info)=>{
-    if(info == ""){
+    if(info == "" && servidorLocal == 0){
         alert("usuario no encontrado");
     }else{
         const posicion = dataUsuarios.placa.indexOf(info[0])
