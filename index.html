@@ -7,15 +7,35 @@
     <title>Document</title>
 </head>
 <body>
+<!-- opcion a seleccionar para mostrar el formulario -->
 <select name="" id="form_registro">
     <option value="opt">selecciona una opción</option>
     <option value="usuario">usuario</option>
     <option value="vehiculo">vehiculo</option>
 </select>
-
-<div id="conte_form">
-
-</div>
+<!-- formulario -->
+<form action="#" id="conte_form"></form>
+<!-- ingreso de datos (codigo de barras) -->
+<input id="codigo" type="text" placeholder="CODIGO">
+<!-- lista de la data que me arroja el codigo de barras -->
+<table id="tabla_data_code" border="1">
+    <header>
+        <tr>
+            <td>FECHA</td>
+            <td>HORA</td>
+            <td>GR</td>
+            <td>NOMBRES Y APELLIDOS</td>
+            <td>PLACA</td>
+        </tr>
+        <tr>
+            <td>DESTINO</td>
+            <td>VEHICULO</td>
+            <td>PLACA</td>
+            <td>PLACA DE VEHICULO</td>
+        </tr>
+    </header>
+</table>
 <script src="/registrar.js"></script>
+<script src="/data_form.js"></script>
 </body>
 </html>
