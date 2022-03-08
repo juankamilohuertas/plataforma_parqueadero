@@ -22,6 +22,25 @@ let recibiendoDatos =(arr)=>{
     }
     mostrandoInfo(dataCode);
 }
+/* fecha */
+const fecha = ()=>{
+    const fecha = new Date();
+    const day = fecha.getDate();
+    const month = fecha.getMonth()+1;
+    const year = fecha.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+const hora =()=>{
+    let _hora;
+    const $hora = new Date();
+    const hora = $hora.getHours();
+    const minutos = $hora.getMinutes();
+    if($hora > 11)_hora = "p.m.";
+    else _hora = "a.m.";
+    
+    return `${hora}:${minutos}${_hora}`;
+}
+
 /* mostrando la info recibida por los datos filtrados */
 const mostrandoInfo = (dataCode)=>{
     let res = dataCode.filter(i => i.includes(codigo.value));
@@ -31,8 +50,8 @@ const mostrandoInfo = (dataCode)=>{
             if(res[0][1] != "MOTO" && res[0][1] != "VEHICULO"){
                 users = `
                 <tr>
-                <td>fecha</td>
-                <td>hoara</td>
+                <td>${fecha()}</td>
+                <td>${hora()}</td>
                 <td>${res[0][0]}</td>
                 <td>${res[0][1]} ${res[0][2]}</td>
                 <td>${res[0][3]}</td>
