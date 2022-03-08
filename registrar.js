@@ -2,7 +2,7 @@ const form_registro = document.getElementById("form_registro");
 const conte_form = document.getElementById("conte_form");
 /* creando formulario de registro de usuarios y motos*/
 const creandoFormRegistro = (gr,nombre,apellido,placa)=>{
-    form = `<input type="text" placeholder=${gr}>
+    const form = `<input type="text" placeholder=${gr}>
             <input type="text" placeholder=${nombre}>
             <input type="text" placeholder=${apellido}>
             <input type="text" placeholder=${placa}>
@@ -10,8 +10,8 @@ const creandoFormRegistro = (gr,nombre,apellido,placa)=>{
     conte_form.innerHTML= form;
     validacionForm();
 }/* mostrando el formulario registro de la opcion escogida */
-let opc = -1;
-let cantidadUser = localStorage.length;
+let opc;
+let cantidadUser = localStorage.length+1;
 const mostrando_formulario =()=>{
    if(form_registro.value == 'usuario'){
     creandoFormRegistro("GR","Nombre","Apellido","Placa");
@@ -34,10 +34,21 @@ const validacionForm = ()=>{
 }/* validando y enviando los datos al  */
 const dataLocalS = (val)=>{
     if(val[0] && val[1] && val[2] && val[3] != ""){
-        localStorage.setItem(opc,val); 
-        conte_form.action="index.html";
+        let arr = [];
+          for (let i = 1; i < cantidadUser; i++) {
+                let valo = localStorage.getItem("KEY_"+i);
+                arr.push(valo.split(","))
+            }
+            let valor = arr.filter(i => i[3] == val[3]);
+            if(valor.length > 0){
+                alert("ya estas registrado")
+            }else{
+                localStorage.setItem(opc,val); 
+                conte_form.action="index.html";
+            }
     }else{
         alert("Llena todos los campos");
     }
 }
+
 
