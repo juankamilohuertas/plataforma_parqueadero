@@ -48,7 +48,7 @@ const mostrandoInfo = (dataCode)=>{
     let res = dataCode.filter(i => i.includes(codigo.value));
     if(res[0] != undefined){
         if(res[0][3] == codigo.value){
-            if(res[0][1] != "MOTO" && res[0][1] != "VEHICULO"){
+            if(res[0][1] != "Moto" && res[0][1] != "Vehiculo"){
                 infoDataUsers(res);  
             }else{
                 infoDataVehiculos(res);
