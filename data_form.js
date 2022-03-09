@@ -1,53 +1,93 @@
-const form_registro = document.getElementById("form_registro");
-const conte_form = document.getElementById("conte_form");
-/* creando formulario de registro de usuarios y motos*/
-const creandoFormRegistro = (gr,nombre,apellido,placa)=>{
-    const form = `<input type="text" placeholder=${gr}>
-            <input type="text" placeholder=${nombre}>
-            <input type="text" placeholder=${apellido}>
-            <input type="text" placeholder=${placa}>
-            <button>Regiatrar</button>`;
-    conte_form.innerHTML= form;
-    validacionForm();
-}/* mostrando el formulario registro de la opcion escogida */
-let opc;
-let cantidadUser = localStorage.length+1;
-const mostrando_formulario =()=>{
-   if(form_registro.value == 'usuario'){
-    creandoFormRegistro("GR","Nombre","Apellido","Placa");
-   }else if(form_registro.value == 'vehiculo'){
-    creandoFormRegistro("Destino","Vehiculo","Placa","PlacaVehiculo");}
-    opc = "KEY_"+cantidadUser;
+const codigo = document.getElementById("codigo");
+const tablaDataUsuarios = document.getElementById("datos_usuario");
+const tablaDataVehiculos = document.getElementById("datos_vehiculo");
+/* convirtiendo los datos del local storage en un array */
+let dataTodosUsers = localStorage.length+1;
+const ingresoCodigo = ()=>{
+    let val;
+    let arr =[];
+    for(let index = 1; index < dataTodosUsers;index++) {
+       val = localStorage.getItem("KEY_"+index);
+       arr.push(val)
+    }   
+   recibiendoDatos(arr);
 }
-form_registro.addEventListener("click", mostrando_formulario);
-/* creando validacion del formulario */
-const validacionForm = ()=>{
-    conte_form.children[4].addEventListener("click", ()=>{
-        let arr = [];
-       for (let index = 0; index < conte_form.length-1; index++) {
-            let res = conte_form.children[index].value;
-           if(res != "")arr.push(res);
-           else arr.push(res);
-       }
-       dataLocalS(arr); 
-    });
-}/* validando y enviando los datos al  */
-const dataLocalS = (val)=>{
-    if(val[0] && val[1] && val[2] && val[3] != ""){
-        let arr = [];
-          for (let i = 1; i < cantidadUser; i++) {
-                let valo = localStorage.getItem("KEY_"+i);
-                arr.push(valo.split(","))
-            }
-            let valor = arr.filter(i => i[3] == val[3]);
-            if(valor.length > 0){
-                alert("ya estas registrado")
-            }else{
-                localStorage.setItem(opc,val); 
-                conte_form.action="index.html";
-            }
-    }else{
-        alert("Llena todos los campos");
+codigo.addEventListener("change", ingresoCodigo);
+/* recibiendo el array y filtrando la info para buscar el codigo de barras */
+let recibiendoDatos =(arr)=>{
+    let dataCode = [];
+    for (const key in arr) {
+        let ultimoArr = arr[key].split(",");
+        dataCode.push(ultimoArr);
     }
+    mostrandoInfo(dataCode);
+}
+/* fecha */
+const fecha = ()=>{
+    const fecha = new Date();
+    const day = fecha.getDate();
+    const month = fecha.getMonth()+1;
+    const year = fecha.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+/* hora */
+const hora =()=>{
+    let _hora;
+    const $hora = new Date();
+    const hora = $hora.getHours();
+    const minutos = $hora.getMinutes();
+    if(hora > 11)_hora = " p.m.";
+    else _hora = " a.m.";
+    
+    return `${hora}:${minutos}${_hora}`;
 }
 
+/* mostrando la info recibida por los datos filtrados y validando*/
+let arr = [];
+const mostrandoInfo = (dataCode)=>{
+    let res = dataCode.filter(i => i.includes(codigo.value));
+    if(res[0] != undefined){
+        if(res[0][3] == codigo.value){
+            if(res[0][1] != "MOTO" && res[0][1] != "VEHICULO"){
+                infoDataUsers(res);  
+            }else{
+                infoDataVehiculos(res);
+            }
+            arr.push(codigo.value);
+        }
+    }else{
+        alert("no esta registrado/a");
+        arr.splice(codigo.value);
+    } 
+    codigo.value= "";
+}
+/* asignando cada dato a la tabla y si no se repite el valor re incerta en el dom */
+const infoDataUsers = (res,users)=>{
+      if(arr.includes(codigo.value)){
+        tablaDataUsuarios.innerHTML += ""; 
+      }else{
+        users = `
+        <tr>
+        <td>${fecha()}</td>
+        <td>${hora()}</td>
+        <td>${res[0][0]}</td>
+        <td>${res[0][1]} ${res[0][2]}</td>
+        <td>${res[0][3]}</td>
+        </tr>`;
+        tablaDataUsuarios.innerHTML += users;  
+      }
+}
+const infoDataVehiculos = (res,vehiculos)=>{
+    if(arr.includes(codigo.value)){
+        tablaDataVehiculos.innerHTML += "";    
+    }else{
+        vehiculos = `
+        <tr>         
+        <td>${res[0][0]}</td>
+        <td>${res[0][1]}</td>
+        <td>${res[0][2]}</td>
+        <td>${res[0][3]}</td>
+        </tr>`;
+        tablaDataVehiculos.innerHTML += vehiculos;   
+    }
+}
