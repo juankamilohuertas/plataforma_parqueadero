@@ -62,28 +62,37 @@ const mostrandoInfo = (dataCode)=>{
     codigo.value= "";
 }
 /* asignando cada dato a la tabla y si no se repite el valor re incerta en el dom y llevando la data al sessionstorage*/
-let registroDeTabla = sessionStorage.length;
-const infoDataUsers = (res)=>{
-      if(arr.includes(codigo.value)){
+let registroDeTabla = sessionStorage.length-1;
+const infoDataUsers = (res,users)=>{
+       let arreglo = [];
+      if(arreglo.includes(codigo.value)){
         tablaDataUsuarios.innerHTML += ""; 
       }else{
+        for (let i = 0; i < registroDeTabla; i++) {
+            arreglo.push(sessionStorage.getItem("TABLA_"+i))
+        }
+        let valor = arreglo;
+        let retorno = [];
+        for (const key in arreglo){
+            retorno.push(arreglo[key].split(",")[4]);
+        }
+        if(retorno.includes(codigo.value)){
+            for (let i = 0; i < arreglo.length; i++) {
+                users += `
+                    <tr>
+                        <td>${valor[i].split(',')[0]}</td>
+                        <td>${valor[i].split(',')[1]}</td>
+                        <td>${valor[i].split(',')[2]}</td>
+                        <td>${valor[i].split(',')[3]}</td>
+                        <td>${valor[i].split(',')[4]}</td>
+                    </tr>`;
+                }     
+                tablaDataUsuarios.innerHTML = users; 
+        }else{
         let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
         sessionStorage.setItem("TABLA_"+registroDeTabla++, registro);
-        let arr = [];
-        for (let i = 0; i < registroDeTabla; i++) {
-            arr.push(sessionStorage.getItem("TABLA_"+i))
+
         }
-        let valor = arr;
-        console.log(valor)
-        users = `
-        <tr>
-        <td>${valor[arr.length-1].split(",")[0]}</td>
-        <td>${valor[arr.length-1].split(",")[1]}</td>
-        <td>${valor[arr.length-1].split(",")[2]}</td>
-        <td>${valor[arr.length-1].split(",")[3]}</td>
-        <td>${valor[arr.length-1].split(",")[4]}</td>
-        </tr>`;
-        tablaDataUsuarios.innerHTML += users; 
     }
 }
 const infoDataVehiculos = (res,vehiculos)=>{
