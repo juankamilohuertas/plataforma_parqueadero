@@ -21,7 +21,6 @@ const creandoFormRegistro = (gr,nombre,apellido,placa)=>{
         <input type="text" placeholder=${placa}>
         <button>Regiatrar</button>`;
     }
-    
     conte_form.innerHTML= form;
     validacionForm();
 }/* mostrando el formulario registro de la opcion escogida */
@@ -51,11 +50,11 @@ form_registro.addEventListener("click", mostrando_formulario);
 const validacionForm = ()=>{
     conte_form.children[4].addEventListener("click", ()=>{
         let arr = [];
-       for (let index = 0; index < conte_form.length-1; index++) {
-            if(index == 1 && form_registro.value == 'vehiculo'){
+       for(let indice = 0; indice < conte_form.children.length; indice++) {
+            if(indice == 1 && form_registro.value == 'vehiculo'){
                 arr.push(optElegida);
             }else{
-                let res = conte_form.children[index].value;
+                let res = conte_form.children[indice].value;
                 if(res != "")arr.push(res);
                 else arr.push(res);
             }
@@ -68,19 +67,16 @@ const dataLocalS = (val)=>{
         let arr = [];
           for (let i = 1; i < cantidadUser; i++) {
                 let valo = localStorage.getItem("KEY_"+i);
-                arr.push(valo.split(","))
+                arr.push(valo.split(","));
             }
             let valor = arr.filter(i => i[3] == val[3]);
             if(valor.length > 0){
-                conte_form.action="index.html?#";
                 alert("ya estas registrado");
             }else{
                 localStorage.setItem(opc,val);
-                conte_form.action="index.html?";
+                window.location.reload("index.html");
             }
     }else{
-        conte_form.action="index.html?#";
         alert("Llena todos los campos");
     }
 }
-
