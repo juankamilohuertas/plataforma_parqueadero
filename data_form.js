@@ -2,13 +2,12 @@ const codigo = document.getElementById("codigo");
 const tablaDataUsuarios = document.getElementById("datos_usuario");
 const tablaDataVehiculos = document.getElementById("datos_vehiculo");
 /* convirtiendo los datos del local storage en un array */
-let dataTodosUsers = localStorage.length+1;
+let dataTodosUsers = localStorage.length;
 const ingresoCodigo = ()=>{
-    let val;
     let arr =[];
-    for(let index = 1; index < dataTodosUsers;index++) {
+    for(let index = 0; index < dataTodosUsers;index++) {
        val = localStorage.getItem("KEY_"+index);
-       arr.push(val)
+       arr.push(JSON.parse(val))
     }   
    recibiendoDatos(arr);
 }
@@ -17,7 +16,7 @@ codigo.addEventListener("change", ingresoCodigo);
 let recibiendoDatos =(arr)=>{
     let dataCode = [];
     for (const key in arr) {
-        let ultimoArr = arr[key].split(",");
+        let ultimoArr = arr[key];
         dataCode.push(ultimoArr);
     }
     mostrandoInfo(dataCode);
@@ -69,28 +68,29 @@ const infoDataUsers = (res,users)=>{
         tablaDataUsuarios.innerHTML += ""; 
       }else{
         for (let i = 0; i < registroDeTabla; i++) {
-            arreglo.push(sessionStorage.getItem("TABLA_"+i))
+            let ret = sessionStorage.getItem("TABLA_"+i)
+            arreglo.push(JSON.parse(ret));
+  
         }
-        let valor = arreglo;
         let retorno = [];
         for (const key in arreglo){
-            retorno.push(arreglo[key].split(",")[4]);
+            retorno.push(arreglo[key][4]);
         }
         if(retorno.includes(codigo.value)){
             for (let i = 0; i < arreglo.length; i++) {
                 users += `
                     <tr>
-                        <td>${valor[i].split(',')[0]}</td>
-                        <td>${valor[i].split(',')[1]}</td>
-                        <td>${valor[i].split(',')[2]}</td>
-                        <td>${valor[i].split(',')[3]}</td>
-                        <td>${valor[i].split(',')[4]}</td>
+                        <td>${arreglo[i][0]}</td>
+                        <td>${arreglo[i][1]}</td>
+                        <td>${arreglo[i][2]}</td>
+                        <td>${arreglo[i][3]}</td>
+                        <td>${arreglo[i][4]}</td>
                     </tr>`;
                 }     
                 tablaDataUsuarios.innerHTML = users; 
         }else{
         let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
-        sessionStorage.setItem("TABLA_"+registroDeTabla++, registro);
+        sessionStorage.setItem("TABLA_"+registroDeTabla++, JSON.stringify(registro));
 
         }
     }
