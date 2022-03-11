@@ -25,7 +25,7 @@ const creandoFormRegistro = (gr,nombre,apellido,placa)=>{
     validacionForm();
 }/* mostrando el formulario registro de la opcion escogida */
 let opc;
-let cantidadUser = localStorage.length+1;
+let cantidadUser = localStorage.length;
 const mostrando_formulario =()=>{
    if(form_registro.value == 'usuario'){   
     creandoFormRegistro("GR","Nombre","Apellido","Placa");
@@ -67,14 +67,14 @@ const dataLocalS = (val)=>{
         let arr = [];
           for (let i = 1; i < cantidadUser; i++) {
                 let valo = localStorage.getItem("KEY_"+i);
-                arr.push(valo.split(","));
+                arr.push(JSON.parse(valo));
             }
             let valor = arr.filter(i => i[3] == val[3]);
             if(valor.length > 0){
                 alert("ya estas registrado");
             }else{
-                localStorage.setItem(opc,val);
-                window.location.reload("index.html");
+                localStorage.setItem(opc,JSON.stringify(val));
+                
             }
     }else{
         alert("Llena todos los campos");
