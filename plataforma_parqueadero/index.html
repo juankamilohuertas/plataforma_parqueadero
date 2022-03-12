@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+    <title>Document</title>
+</head>
+<body style="background-color: black;">
+<p id="error_Agregado_tabla"></p>
+<!-- opcion a seleccionar para mostrar el formulario -->
+<select id="form_registro">
+    <option value="opt">selecciona una opción</option>
+    <option value="usuario">usuario</option>
+    <option value="vehiculo">vehiculo</option>
+</select>
+<!-- formulario -->
+<div id="conte_form"></div>
+<!-- ingreso de datos (codigo de barras) -->
+<input id="codigo" type="text" placeholder="CODIGO">
+<!-- lista de la data que me arroja el codigo de barras -->
+<div style="display: flex;">
+<table border="1">
+    <thead>
+        <tr>
+            <td>FECHA</td>
+            <td>HORA</td>
+            <td>GR</td>
+            <td>NOMBRES Y APELLIDOS</td>
+            <td>PLACA</td>
+        </tr>   
+    </thead>
+    <tbody id="datos_usuario" class="columnas_usuario"></tbody>
+</table>
+<table border="1">
+    <tr>
+        <td>DESTINO</td>
+        <td>VEHICULO</td>
+        <td>PLACA</td>
+        <td>PLACA DE VEHICULO</td>
+    </tr>
+    <tbody id="datos_vehiculo" class="columnas_vehiculo"></tbody>
+</table>
+</div>
+<script>
+</script>
+<script src="registrar.js"></script>
+<script src="data_form.js"></script>
+</body>
+</html>
