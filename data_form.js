@@ -48,10 +48,11 @@ const mostrandoInfo = (dataCode)=>{
     if(res[0] != undefined){
         if(res[0][3] == codigo.value){
             if(res[0][1] != "Moto" && res[0][1] != "Vehiculo"){
-                infoDataUsers(res);  
+                infoDataUsers(res);
             }else{
-                infoDataVehiculos(res);
+                /* infoDataVehiculos(res); */
             }
+            window.location.reload();
             arr.push(codigo.value);
         }
     }else{
@@ -61,41 +62,61 @@ const mostrandoInfo = (dataCode)=>{
     codigo.value= "";
 }
 /* asignando cada dato a la tabla y si no se repite el valor re incerta en el dom y llevando la data al sessionstorage*/
-let registroDeTabla = sessionStorage.length-1;
-const infoDataUsers = (res,users)=>{
-       let arreglo = [];
-      if(arreglo.includes(codigo.value)){
-        tablaDataUsuarios.innerHTML += ""; 
-      }else{
-        for (let i = 0; i < registroDeTabla; i++) {
-            let ret = sessionStorage.getItem("TABLA_"+i)
-            arreglo.push(JSON.parse(ret));
-  
-        }
-        let retorno = [];
-        for (const key in arreglo){
-            retorno.push(arreglo[key][4]);
-        }
-        if(retorno.includes(codigo.value)){
-            for (let i = 0; i < arreglo.length; i++) {
-                users += `
-                    <tr>
-                        <td>${arreglo[i][0]}</td>
-                        <td>${arreglo[i][1]}</td>
-                        <td>${arreglo[i][2]}</td>
-                        <td>${arreglo[i][3]}</td>
-                        <td>${arreglo[i][4]}</td>
-                    </tr>`;
-                }     
-                tablaDataUsuarios.innerHTML = users; 
-        }else{
-        let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
-        sessionStorage.setItem("TABLA_"+registroDeTabla++, JSON.stringify(registro));
+let registroDeTabla = sessionStorage.length;
 
-        }
+const infoDataUsers = (res)=>{
+    if(sessionStorage.length == 0){
+        let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
+        sessionStorage.setItem("TABLA_"+registroDeTabla++, JSON.stringify(registro));  
+    }else{
+        let data = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+            let dataSetSsesion = tablaDataUsuarios.children[i];
+            data.push(dataSetSsesion.children[4].textContent);
+         }  
+         validacionInfo(data,res);  
+    }     
+}
+const validacionInfo =(data,res)=>{
+    if(data.includes(codigo.value)){
+
+        console.log("ya esta AGREGADO");
+    }else{
+       let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
+       sessionStorage.setItem("TABLA_"+registroDeTabla++, JSON.stringify(registro));  
     }
 }
-const infoDataVehiculos = (res,vehiculos)=>{
+let pro = new Promise((resolve)=>{
+    setTimeout(()=>{
+        let users = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+            let getSession = sessionStorage.getItem(`TABLA_${i}`);
+            let data = JSON.parse(getSession);
+            console.log(data)
+            users.push(`
+            <tr>
+                <td>${data[0]}</td>
+                <td>${data[1]}</td>
+                <td>${data[2]}</td>
+                <td>${data[3]}</td>
+                <td>${data[4]}</td>
+            </tr>`);    
+        }
+
+        resolve(users);
+    },500);
+})
+pro.then((prev)=>{
+    if(prev == null){
+        alert("no se encontraron resultados")
+    }else{
+        tablaDataUsuarios.innerHTML = prev.join(""); 
+    }
+})  
+
+
+
+/* const infoDataVehiculos = (res,vehiculos)=>{
     if(arr.includes(codigo.value)){
         tablaDataVehiculos.innerHTML += "";    
     }else{
@@ -109,3 +130,4 @@ const infoDataVehiculos = (res,vehiculos)=>{
         tablaDataVehiculos.innerHTML += vehiculos;   
     }
 }
+ */
