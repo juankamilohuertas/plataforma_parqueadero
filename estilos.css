@@ -1,5 +1,9 @@
+.conte_tablas{
+    display: flex;
+}
 table{
     background-color: black;
+    height: 20px;
 }
 tr{
     color: white;
