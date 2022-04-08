@@ -74,7 +74,7 @@ const dataLocalS = (val)=>{
                 alert("ya estas registrado");
             }else{
                 localStorage.setItem(opc,JSON.stringify(val));
-                
+                window.location.reload();
             }
     }else{
         alert("Llena todos los campos");
