@@ -5,11 +5,17 @@ const tablaDataVehiculos = document.getElementById("datos_vehiculo");
 let dataTodosUsers = localStorage.length;
 const ingresoCodigo = ()=>{
     let arr =[];
+    let registroNull = [];
     for(let index = 0; index < dataTodosUsers;index++) {
        val = localStorage.getItem("KEY_"+index);
        arr.push(JSON.parse(val))
     }   
-   recibiendoDatos(arr);
+    for (let i in arr) {
+        if(arr[i] != null){
+            registroNull.push(arr[i])
+        }
+    }
+   recibiendoDatos(registroNull);
 }
 codigo.addEventListener("change", ingresoCodigo);
 /* recibiendo el array y filtrando la info para buscar el codigo de barras */
@@ -71,16 +77,15 @@ const infoDataUsers = (res,users,tabla,inid)=>{
             <td>${hora()}</td>
             <td>${res[0][0]}</td>
             <td>${res[0][1]} ${res[0][2]}</td>
-            <td>${res[0][3]}</td>
-            <td><button>ELIMINAR</button></td></tr>`;
+            <td>${res[0][3]}</td>`;
         }else{
             dataTipo = `
             <tr>
                 <td>${res[0][0]}</td><td>${res[0][1]}</td>
                 <td>${res[0][2]}</td><td>${res[0][3]}</td>
+                <td><button>ELIMINAR</button></td></tr>
             </tr>`; 
         }
-    
         filaRepetida(users,tabla,inid,dataTipo);
     }      
 } 
@@ -90,7 +95,7 @@ const filaRepetida = (users,tabla,inid,dataTipo)=>{
     const filasTabla = tabla.children;
     let fila = [];
      if(filasTabla.length == 0){
-        sessionStorage.setItem(users, tabla.innerHTML += dataTipo);
+        localStorage.setItem(users, tabla.innerHTML += dataTipo);
     }else{
         for (let i = 0; i < filasTabla.length; i++) {
             fila.push(filasTabla[i].children[inid].textContent);}
@@ -99,11 +104,12 @@ const filaRepetida = (users,tabla,inid,dataTipo)=>{
             setInterval(()=>{
                 document.getElementById("error_Agregado_tabla").innerHTML = "";
             },5000)
-        }else sessionStorage.setItem(users, tabla.innerHTML += dataTipo);
+        }else localStorage.setItem(users, tabla.innerHTML += dataTipo);
     }   
 }
-let use = sessionStorage.getItem("USUARIO_");
+let use = localStorage.getItem("USUARIO_");
 tablaDataUsuarios.innerHTML = use; 
 
-let veh = sessionStorage.getItem("VEHICULOS_");
+
+let veh = localStorage.getItem("VEHICULOS_");
 tablaDataVehiculos.innerHTML = veh;
