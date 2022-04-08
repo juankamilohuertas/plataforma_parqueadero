@@ -48,11 +48,10 @@ const mostrandoInfo = (dataCode)=>{
     if(res[0] != undefined){
         if(res[0][3] == codigo.value){
             if(res[0][1] != "Moto" && res[0][1] != "Vehiculo"){
-                infoDataUsers(res);
+                infoDataUsers(res,"USUARIO_",tablaDataUsuarios,4);  
             }else{
-                /* infoDataVehiculos(res); */
+                infoDataUsers(res,"VEHICULOS_",tablaDataVehiculos,3);
             }
-            window.location.reload();
             arr.push(codigo.value);
         }
     }else{
@@ -61,73 +60,50 @@ const mostrandoInfo = (dataCode)=>{
     } 
     codigo.value= "";
 }
-/* asignando cada dato a la tabla y si no se repite el valor re incerta en el dom y llevando la data al sessionstorage*/
-let registroDeTabla = sessionStorage.length;
-
-const infoDataUsers = (res)=>{
-    if(sessionStorage.length == 0){
-        let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
-        sessionStorage.setItem("TABLA_"+registroDeTabla++, JSON.stringify(registro));  
-    }else{
-        let data = [];
-        for (let i = 0; i < sessionStorage.length; i++) {
-            let dataSetSsesion = tablaDataUsuarios.children[i];
-            data.push(dataSetSsesion.children[4].textContent);
-         }  
-         validacionInfo(data,res);  
-    }     
-}
-const validacionInfo =(data,res)=>{
-    if(data.includes(codigo.value)){
-
-        console.log("ya esta AGREGADO");
-    }else{
-       let registro = [fecha(),hora(),res[0][0],res[0][1]+" "+res[0][2],res[0][3]]
-       sessionStorage.setItem("TABLA_"+registroDeTabla++, JSON.stringify(registro));  
-    }
-}
-let pro = new Promise((resolve)=>{
-    setTimeout(()=>{
-        let users = [];
-        for (let i = 0; i < sessionStorage.length; i++) {
-            let getSession = sessionStorage.getItem(`TABLA_${i}`);
-            let data = JSON.parse(getSession);
-            console.log(data)
-            users.push(`
+// contenido de usuarios y vehiculos que se van a mostrar en el DOM;
+const infoDataUsers = (res,users,tabla,inid)=>{
+    if(res == undefined) tabla.innerHTML += "";
+    else{
+        let dataTipo;
+        if(users == "USUARIO_"){
+            dataTipo = `<tr>
+            <td>${fecha()}</td>
+            <td>${hora()}</td>
+            <td>${res[0][0]}</td>
+            <td>${res[0][1]} ${res[0][2]}</td>
+            <td>${res[0][3]}</td>
+            <td><button>ELIMINAR</button></td></tr>`;
+        }else{
+            dataTipo = `
             <tr>
-                <td>${data[0]}</td>
-                <td>${data[1]}</td>
-                <td>${data[2]}</td>
-                <td>${data[3]}</td>
-                <td>${data[4]}</td>
-            </tr>`);    
+                <td>${res[0][0]}</td><td>${res[0][1]}</td>
+                <td>${res[0][2]}</td><td>${res[0][3]}</td>
+            </tr>`; 
         }
-
-        resolve(users);
-    },500);
-})
-pro.then((prev)=>{
-    if(prev == null){
-        alert("no se encontraron resultados")
+    
+        filaRepetida(users,tabla,inid,dataTipo);
+    }      
+} 
+/* asignando cada dato a la tabla y si no se repite el valor se incerta en el DOM
+LO QUE EJECUTA LA FUNCION infoDataUsers y llevando la data al sessionstorage*/
+const filaRepetida = (users,tabla,inid,dataTipo)=>{
+    const filasTabla = tabla.children;
+    let fila = [];
+     if(filasTabla.length == 0){
+        sessionStorage.setItem(users, tabla.innerHTML += dataTipo);
     }else{
-        tablaDataUsuarios.innerHTML = prev.join(""); 
-    }
-})  
-
-
-
-/* const infoDataVehiculos = (res,vehiculos)=>{
-    if(arr.includes(codigo.value)){
-        tablaDataVehiculos.innerHTML += "";    
-    }else{
-        vehiculos = `
-        <tr>         
-        <td>${res[0][0]}</td>
-        <td>${res[0][1]}</td>
-        <td>${res[0][2]}</td>
-        <td>${res[0][3]}</td>
-        </tr>`;
-        tablaDataVehiculos.innerHTML += vehiculos;   
-    }
+        for (let i = 0; i < filasTabla.length; i++) {
+            fila.push(filasTabla[i].children[inid].textContent);}
+        if(fila.includes(codigo.value)){
+            document.getElementById("error_Agregado_tabla").innerHTML = "¡..YA HA SIDO AGREGADO ESTE USUARIO..!";
+            setInterval(()=>{
+                document.getElementById("error_Agregado_tabla").innerHTML = "";
+            },5000)
+        }else sessionStorage.setItem(users, tabla.innerHTML += dataTipo);
+    }   
 }
- */
+let use = sessionStorage.getItem("USUARIO_");
+tablaDataUsuarios.innerHTML = use; 
+
+let veh = sessionStorage.getItem("VEHICULOS_");
+tablaDataVehiculos.innerHTML = veh;
