@@ -12,7 +12,7 @@ const ingresoCodigo = ()=>{
     }   
     for (let i in arr) {
         if(arr[i] != null){
-            registroNull.push(arr[i])
+            registroNull.push(arr[i])    
         }
     }
    recibiendoDatos(registroNull);
@@ -28,19 +28,18 @@ let recibiendoDatos =(arr)=>{
     mostrandoInfo(dataCode);
 }
 /* fecha */
+const $fecha = new Date();
 const fecha = ()=>{
-    const fecha = new Date();
-    const day = fecha.getDate();
-    const month = fecha.getMonth()+1;
-    const year = fecha.getFullYear();
+    const day = $fecha.getDate();
+    const month = $fecha.getMonth()+1;
+    const year = $fecha.getFullYear();
     return `${day}/${month}/${year}`;
 }
 /* hora */
 const hora =()=>{
     let _hora;
-    const $hora = new Date();
-    const hora = $hora.getHours();
-    const minutos = $hora.getMinutes();
+    const hora = $fecha.getHours();
+    const minutos = $fecha.getMinutes();
     if(hora > 11)_hora = " p.m.";
     else _hora = " a.m.";
     
@@ -69,47 +68,58 @@ const mostrandoInfo = (dataCode)=>{
 // contenido de usuarios y vehiculos que se van a mostrar en el DOM;
 const infoDataUsers = (res,users,tabla,inid)=>{
     if(res == undefined) tabla.innerHTML += "";
-    else{
-        let dataTipo;
+    else{let dataTipo;
         if(users == "USUARIO_"){
-            dataTipo = `<tr>
-            <td>${fecha()}</td>
-            <td>${hora()}</td>
-            <td>${res[0][0]}</td>
-            <td>${res[0][1]} ${res[0][2]}</td>
-            <td>${res[0][3]}</td>`;
-        }else{
-            dataTipo = `
-            <tr>
-                <td>${res[0][0]}</td><td>${res[0][1]}</td>
-                <td>${res[0][2]}</td><td>${res[0][3]}</td>
-                <td><button>ELIMINAR</button></td></tr>
-            </tr>`; 
-        }
-        filaRepetida(users,tabla,inid,dataTipo);
+            if(tablaDataVehiculos.children.length >= tablaDataUsuarios.children.length){
+              dataTipo = `
+              <tr class= "filasUsuarios">
+                  <td>${fecha()}</td>
+                  <td>${hora()}</td>
+                  <td>${res[0][0]}</td>
+                  <td>${res[0][1]} ${res[0][2]}</td>
+                  <td>${res[0][3]}</td>
+              </tr>`;
+            }else{  
+              dataTipo = "";
+              document.getElementById("ya_existe").innerHTML = "AL USUARIO LE FALTA EL VEHICULO"; 
+            }
+        }else if(users == "VEHICULOS_"){
+            if(tablaDataUsuarios.children.length >= tablaDataVehiculos.children.length){
+                dataTipo = `
+                <tr class ="filasVehiculos">
+                    <td>${res[0][0]}</td><td>${res[0][1]}</td>
+                    <td>${res[0][2]}</td><td>${res[0][3]}</td>
+                </tr>`; 
+            }else{
+                dataTipo = "";
+                document.getElementById("ya_existe").innerHTML = "AL VEHICULO LE FALTA EL USUARIO"; 
+            }
+        }filaRepetida(users,tabla,inid,dataTipo);
     }      
 } 
 /* asignando cada dato a la tabla y si no se repite el valor se incerta en el DOM
-LO QUE EJECUTA LA FUNCION infoDataUsers y llevando la data al sessionstorage*/
+LO QUE EJECUTA LA FUNCION infoDataUsers y llevando la data al localstorague*/
+let validacion = [];
 const filaRepetida = (users,tabla,inid,dataTipo)=>{
     const filasTabla = tabla.children;
     let fila = [];
      if(filasTabla.length == 0){
-        localStorage.setItem(users, tabla.innerHTML += dataTipo);
+        localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));
+        window.location.reload();
     }else{
         for (let i = 0; i < filasTabla.length; i++) {
             fila.push(filasTabla[i].children[inid].textContent);}
         if(fila.includes(codigo.value)){
-            document.getElementById("error_Agregado_tabla").innerHTML = "¡..YA HA SIDO AGREGADO ESTE USUARIO..!";
+            document.getElementById("ya_existe").innerHTML = "¡..YA HA SIDO AGREGADO ESTE USUARIO..!";
             setInterval(()=>{
-                document.getElementById("error_Agregado_tabla").innerHTML = "";
+                document.getElementById("ya_existe").innerHTML = "";
             },5000)
-        }else localStorage.setItem(users, tabla.innerHTML += dataTipo);
+        }else localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));   
     }   
 }
 let use = localStorage.getItem("USUARIO_");
-tablaDataUsuarios.innerHTML = use; 
-
-
+let prevUser = JSON.parse(use)
+tablaDataUsuarios.innerHTML = prevUser; 
 let veh = localStorage.getItem("VEHICULOS_");
-tablaDataVehiculos.innerHTML = veh;
+let prevVehiculo = JSON.parse(veh)
+tablaDataVehiculos.innerHTML = prevVehiculo;
