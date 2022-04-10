@@ -65,11 +65,17 @@ const validacionForm = ()=>{
 const dataLocalS = (val)=>{
     if(val[0] && val[1] && val[2] && val[3] != ""){
         let arr = [];
+        let registrados = [];
           for (let i = 1; i < cantidadUser; i++) {
                 let valo = localStorage.getItem("KEY_"+i);
                 arr.push(JSON.parse(valo));
             }
-            let valor = arr.filter(i => i[3] == val[3]);
+            for (const i in arr) {
+                if(arr[i] != null){
+                   registrados.push(arr[i])
+                }
+            }
+            let valor = registrados.filter(i => i[3] == val[3]);
             if(valor.length > 0){
                 alert("ya estas registrado");
             }else{
