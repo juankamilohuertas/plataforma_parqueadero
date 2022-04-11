@@ -42,7 +42,6 @@ const hora =()=>{
     const minutos = $fecha.getMinutes();
     if(hora > 11)_hora = " p.m.";
     else _hora = " a.m.";
-    
     return `${hora}:${minutos}${_hora}`;
 }
 
@@ -60,10 +59,10 @@ const mostrandoInfo = (dataCode)=>{
             arr.push(codigo.value);
         }
     }else{
-        alert("no esta registrado/a");
+        mensajes("no esta registrado/a");
         arr.splice(codigo.value);
     } 
-    codigo.value= "";
+    codigo.value= ""; codigo.focus();
 }
 // contenido de usuarios y vehiculos que se van a mostrar en el DOM;
 const infoDataUsers = (res,users,tabla,inid)=>{
@@ -81,7 +80,7 @@ const infoDataUsers = (res,users,tabla,inid)=>{
               </tr>`;
             }else{  
               dataTipo = "";
-              document.getElementById("ya_existe").innerHTML = "AL USUARIO LE FALTA EL VEHICULO"; 
+              mensajes("AL USUARIO LE FALTA EL VEHICULO"); 
             }
         }else if(users == "VEHICULOS_"){
             if(tablaDataUsuarios.children.length >= tablaDataVehiculos.children.length){
@@ -92,10 +91,10 @@ const infoDataUsers = (res,users,tabla,inid)=>{
                 </tr>`; 
             }else{
                 dataTipo = "";
-                document.getElementById("ya_existe").innerHTML = "AL VEHICULO LE FALTA EL USUARIO"; 
+                mensajes("AL VEHICULO LE FALTA EL USUARIO"); 
             }
         }filaRepetida(users,tabla,inid,dataTipo);
-    }      
+    }codigo.focus();   
 } 
 /* asignando cada dato a la tabla y si no se repite el valor se incerta en el DOM
 LO QUE EJECUTA LA FUNCION infoDataUsers y llevando la data al localstorague*/
@@ -110,10 +109,7 @@ const filaRepetida = (users,tabla,inid,dataTipo)=>{
         for (let i = 0; i < filasTabla.length; i++) {
             fila.push(filasTabla[i].children[inid].textContent);}
         if(fila.includes(codigo.value)){
-            document.getElementById("ya_existe").innerHTML = "¡..YA HA SIDO AGREGADO ESTE USUARIO..!";
-            setInterval(()=>{
-                document.getElementById("ya_existe").innerHTML = "";
-            },5000)
+            mensajes("¡..YA HA SIDO AGREGADO ESTE USUARIO..!");
         }else localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));   
     }   
 }
