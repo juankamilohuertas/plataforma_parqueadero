@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 <body style="background-color: rgb(128, 128, 128);">
+<!-- mensaje -->
 <p id="ya_existe"></p>
 <!-- opcion a seleccionar para mostrar el formulario -->
 <select id="form_registro">
@@ -19,9 +20,10 @@
 <div id="conte_form"></div>
 <!-- ingreso de datos (codigo de barras) -->
 <input id="codigo" type="text" placeholder="CODIGO">
-<!-- lista de la informacion que me arroja el codigo de barras -->
-<div id="msj_time_eliminar_data"><p></p></div>
-<button id="btn_eliminar_todo">ELIMINAR TODO</button>
+<!-- mensaje de tiempo para borar la data -->
+<div id="msj_time_eliminar_data"></div>
+<!-- tablas de la informacion que me arroja el codigo de barras -->
+<button id="btn_eliminar_todo">CREAR NUEVA TABLA</button>
 <div class="conte_tablas">
 <table border="1">
     <thead>
@@ -47,7 +49,18 @@
     <tbody id="datos_vehiculo" class="columnas_vehiculo"></tbody>
 </table>
 </div>
+<!-- boton para descargar las tablas -->
+
+
+<!-- mensaje que arroja la lectura del codigo de Barras -->
 <script>
+    const mensajes = (mensaje)=>{
+        setTimeout(()=>{
+            mensaje = "";
+            window.location.reload();
+        },2000)
+        document.getElementById("ya_existe").innerHTML = mensaje;
+    }
 </script>
 <script src="/registrar.js"></script>
 <script src="/data_form.js"></script>
