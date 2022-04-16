@@ -1,6 +1,9 @@
 const codigo = document.getElementById("codigo");
 const tablaDataUsuarios = document.getElementById("datos_usuario");
 const tablaDataVehiculos = document.getElementById("datos_vehiculo");
+const tablaDataUsuarios1 = document.getElementById("datos_usuario1");
+const tablaDataVehiculos1 = document.getElementById("datos_vehiculo1");
+const datosIngreso = document.getElementById("datos_ingreso");
 /* convirtiendo los datos del local storage en un array */
 let dataTodosUsers = localStorage.length;
 const ingresoCodigo = ()=>{
@@ -36,25 +39,45 @@ const fecha = ()=>{
     return `${day}/${month}/${year}`;
 }
 /* hora */
-const hora =()=>{
+const hora = $fecha.getHours();
+const minutos = $fecha.getMinutes();
+const horas =()=>{
     let _hora;
-    const hora = $fecha.getHours();
-    const minutos = $fecha.getMinutes();
     if(hora > 11)_hora = " p.m.";
     else _hora = " a.m.";
     return `${hora}:${minutos}${_hora}`;
 }
 
+
 /* mostrando la info recibida por los datos filtrados y validando*/
 let arr = [];
+let keyUsuario;
+let keyVehiculos;
+let tablaUsuarios;
+let tablaVehiculos;
+/* eligiendo tabla */
+const elegirTabla = ()=>{
+    if(msj_eliminar_tabla.innerHTML.includes("Mañana")){
+        keyUsuario = "USUARIO_";
+        keyVehiculos = "VEHICULOS_";
+        tablaUsuarios = tablaDataUsuarios;
+        tablaVehiculos = tablaDataVehiculos;
+    }else{
+        keyUsuario = "USUARIO_1";
+        keyVehiculos = "VEHICULOS_1";
+        tablaUsuarios = tablaDataUsuarios1;
+        tablaVehiculos = tablaDataVehiculos1;
+    }
+}
 const mostrandoInfo = (dataCode)=>{
+    elegirTabla();
     let res = dataCode.filter(i => i.includes(codigo.value));
     if(res[0] != undefined){
         if(res[0][3] == codigo.value){
             if(res[0][1] != "Moto" && res[0][1] != "Vehiculo"){
-                infoDataUsers(res,"USUARIO_",tablaDataUsuarios,4);  
+                infoDataUsers(res,keyUsuario,tablaUsuarios,5);   
             }else{
-                infoDataUsers(res,"VEHICULOS_",tablaDataVehiculos,3);
+                infoDataUsers(res,keyVehiculos,tablaVehiculos,3);
             }
             arr.push(codigo.value);
         }
@@ -64,16 +87,37 @@ const mostrandoInfo = (dataCode)=>{
     } 
     codigo.value= ""; codigo.focus();
 }
+/* turno */
+let turno;
+let colorTurno;
+const turnos = ()=>{
+    if(hora < 15){
+    turno = "SEGUNDO";
+    colorTurno = "#999900";
+    }else if(hora < 23){
+    turno = "TERCERO";
+    colorTurno = "#092274";
+    }else if(hora < 8){
+    turno = "PRIMERO";
+    colorTurno = "#922003";
+    }
+}
 // contenido de usuarios y vehiculos que se van a mostrar en el DOM;
+let datosI = [];
+let dataTotal = [];
+ /* DATOS DE INGRESO */
+ let fechaIngreso = fecha();
+ let HoraIngreso = horas();
 const infoDataUsers = (res,users,tabla,inid)=>{
     if(res == undefined) tabla.innerHTML += "";
-    else{let dataTipo;
-        if(users == "USUARIO_"){
+    else{let dataTipo;turnos();
+        if(users == keyUsuario){
             if(tablaDataVehiculos.children.length >= tablaDataUsuarios.children.length){
               dataTipo = `
               <tr class= "filasUsuarios">
+                  <td style="background-color: ${colorTurno};">${turno}</td>
                   <td>${fecha()}</td>
-                  <td>${hora()}</td>
+                  <td>${horas()}</td>
                   <td>${res[0][0]}</td>
                   <td>${res[0][1]} ${res[0][2]}</td>
                   <td>${res[0][3]}</td>
@@ -82,7 +126,7 @@ const infoDataUsers = (res,users,tabla,inid)=>{
               dataTipo = "";
               mensajes("AL USUARIO LE FALTA EL VEHICULO"); 
             }
-        }else if(users == "VEHICULOS_"){
+        }else if(users == keyVehiculos){
             if(tablaDataUsuarios.children.length >= tablaDataVehiculos.children.length){
                 dataTipo = `
                 <tr class ="filasVehiculos">
@@ -94,8 +138,40 @@ const infoDataUsers = (res,users,tabla,inid)=>{
                 mensajes("AL VEHICULO LE FALTA EL USUARIO"); 
             }
         }filaRepetida(users,tabla,inid,dataTipo);
-    }codigo.focus();   
-} 
+    }codigo.focus();  
+}
+
+
+
+
+let ingresandoData = [];
+const tablaIngreso = (valor)=>{
+    for (let i = 0; i < tablaDataVehiculos.children.length; i++) {
+        if(tablaDataVehiculos.children[i].children[3].textContent.includes(valor)){
+            ingresandoData[i] = HoraIngreso;
+        }else{
+            ingresandoData[i] ="sin ingreso";
+        }
+        localStorage.setItem("INGRESO", JSON.stringify(ingresandoData))
+    }
+}
+
+let info = localStorage.getItem("INGRESO");
+let conver = JSON.parse(info);
+if(conver != null){
+    for (let i = 0; i < conver.length; i++) {
+        datosIngreso.innerHTML += `
+        <tr>
+            <td>${conver[i]}</td>
+        </tr>
+        `; 
+    }
+}
+ 
+
+
+
+
 /* asignando cada dato a la tabla y si no se repite el valor se incerta en el DOM
 LO QUE EJECUTA LA FUNCION infoDataUsers y llevando la data al localstorague*/
 let validacion = [];
@@ -109,8 +185,11 @@ const filaRepetida = (users,tabla,inid,dataTipo)=>{
         for (let i = 0; i < filasTabla.length; i++) {
             fila.push(filasTabla[i].children[inid].textContent);}
         if(fila.includes(codigo.value)){
-            mensajes("¡..YA HA SIDO AGREGADO ESTE USUARIO..!");
-        }else localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));   
+         mensajes("¡..YA HA SIDO AGREGADO ESTE USUARIO..!");  
+         if(users == "VEHICULOS_"){
+            tablaIngreso(codigo.value) 
+         }
+        }else{localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));}  
     }   
 }
 let use = localStorage.getItem("USUARIO_");
@@ -119,3 +198,12 @@ tablaDataUsuarios.innerHTML = prevUser;
 let veh = localStorage.getItem("VEHICULOS_");
 let prevVehiculo = JSON.parse(veh)
 tablaDataVehiculos.innerHTML = prevVehiculo;
+
+
+let use1 = localStorage.getItem("USUARIO_1");
+let prevUser1 = JSON.parse(use1)
+tablaDataUsuarios1.innerHTML = prevUser1; 
+let veh1 = localStorage.getItem("VEHICULOS_1");
+let prevVehiculo1 = JSON.parse(veh1)
+tablaDataVehiculos1.innerHTML = prevVehiculo1;
+
