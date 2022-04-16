@@ -22,42 +22,60 @@
 <input id="codigo" type="text" placeholder="CODIGO">
 <!-- mensaje de tiempo para borar la data -->
 <div id="msj_time_eliminar_data"></div>
-<!-- tablas de la informacion que me arroja el codigo de barras -->
-<button id="btn_eliminar_todo">CREAR NUEVA TABLA</button>
-<div class="conte_tablas">
-<table border="1">
-    <thead>
-        <tr>
-            <td>FECHA</td>
-            <td>HORA</td>
-            <td>GR</td>
-            <td>NOMBRES Y APELLIDOS</td>
-            <td>PLACA</td>
-        </tr>   
-    </thead>
-    <tbody id="datos_usuario" class="columnas_usuario"></tbody>
-</table>
-<table border="1">
-    <thead>
-        <tr>
-            <td>DESTINO</td>
-            <td>VEHICULO</td>
-            <td>SIGLA</td>
-            <td>PLACA DE VEHICULO</td>
-        </tr>
-    </thead>
-    <tbody id="datos_vehiculo" class="columnas_vehiculo"></tbody>
-</table>
+<!-- boton de borar tabla #0 -->
+<button id="btn_eliminar_todo">BORAR TABLA</button>
+<!-- tablas #0 de la informacion que me arroja el codigo de barras -->
+<div id="conte_tablas" class="conte_tablas">
+    <table class="tablaUser" border="1">
+        <thead><tr><td>TURNO</td><td>FECHA</td><td>HORA</td><td>GR</td>
+            <td>NOMBRES Y APELLIDOS</td><td>PLACA</td></tr>   
+        </thead>
+        <tbody id="datos_usuario" class="columnas_usuario"></tbody> 
+    </table>
+    <table class="tablaUser" border="1">
+        <thead><tr><td>DESTINO</td><td>VEHICULO</td>
+                <td>SIGLA</td><td>PLACA DE VEHICULO</td>
+        </thead>
+        <tbody id="datos_vehiculo" class="columnas_vehiculo"></tbody>
+    </table>
+    <table class="tablaUser" border="1">
+        <thead>
+            <tr>
+                <td>FECHA (I)</td><td>HORA (I)</td>
+                <td>NOVEDAD</td></tr>
+            </tr>
+        </thead>
+        <tbody id="datos_ingreso" class="columnas_ingreso"></tbody>
+    </table>
 </div>
+<!-- boton de borar tabla #1 -->
+<button id="btn_eliminar_todo1">BORAR TABLA</button>
+<!-- tablas #1 de la informacion que me arroja el codigo de barras -->
+<div id="conte_tablas1" class="conte_tablas">
+    <table class="tablaUser1" border="1"><!-- tabla uno de usuarios -->
+        <thead><tr><td>TURNO</td><td>FECHA</td><td>HORA</td><td>GR</td>
+            <td>NOMBRES Y APELLIDOS</td><td>PLACA</td></tr>   
+        </thead>
+        <tbody id="datos_usuario1" class="columnas_usuario TablaUsuarios"></tbody>
+    </table>
+    <table class="tablaUser1" border="1"><!-- tabla uno de vehiculos -->
+        <thead><tr><td>DESTINO</td><td>VEHICULO</td>
+            <td>SIGLA</td><td>PLACA DE VEHICULO</td></tr>
+        </thead>
+        <tbody id="datos_vehiculo1" class="columnas_vehiculo"></tbody>
+    </table>
+</div>
+
+
 <!-- boton para descargar las tablas -->
-
-
-<!-- mensaje que arroja la lectura del codigo de Barras -->
+<p id="tabla">contenido</p>
+<a href="#tabla" download="tabla.xls">descargar</a>
 <script>
+    /* mensaje que arroja la lectura del codigo de Barras */
     const mensajes = (mensaje)=>{
         setTimeout(()=>{
             mensaje = "";
-            window.location.reload();
+            window.location.reload(); 
         },2000)
         document.getElementById("ya_existe").innerHTML = mensaje;
     }
