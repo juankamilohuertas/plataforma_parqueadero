@@ -141,35 +141,41 @@ const infoDataUsers = (res,users,tabla,inid)=>{
     }codigo.focus();  
 }
 
-
-
-
-let ingresandoData = [];
+/* INGRESO DE VEHICULOS */
+let contCatualizado = localStorage.getItem("CONTEO");
+localStorage.setItem("CONTEO", contCatualizado);
+if(contCatualizado == 0){
+    datosIngreso.style.display="none";
+    localStorage.setItem("INGRESO", JSON.stringify([null]))
+}
 const tablaIngreso = (valor)=>{
     for (let i = 0; i < tablaDataVehiculos.children.length; i++) {
         if(tablaDataVehiculos.children[i].children[3].textContent.includes(valor)){
-            ingresandoData[i] = HoraIngreso;
-        }else{
-            ingresandoData[i] ="sin ingreso";
-        }
-        localStorage.setItem("INGRESO", JSON.stringify(ingresandoData))
+            if(conver[i] == null || conver[i] == "SIN INGRESO"){
+                conver[i] = HoraIngreso; 
+                localStorage.setItem("INGRESO", JSON.stringify(conver))
+            }
+        }     
     }
+    localStorage.setItem("CONTEO", 1);
 }
-
+/* MOSTRANDO EL INGRESO DE VEHICULOS EN EL DOM*/
 let info = localStorage.getItem("INGRESO");
 let conver = JSON.parse(info);
 if(conver != null){
     for (let i = 0; i < conver.length; i++) {
+        if(conver[i] == null){
+            conver[i] = "SIN INGRESO";
+        }
         datosIngreso.innerHTML += `
         <tr>
+            <td>${fecha()}</td>
             <td>${conver[i]}</td>
+            <td><input type="text" value="S/N"></td>
         </tr>
         `; 
     }
 }
- 
-
-
 
 
 /* asignando cada dato a la tabla y si no se repite el valor se incerta en el DOM
@@ -185,9 +191,10 @@ const filaRepetida = (users,tabla,inid,dataTipo)=>{
         for (let i = 0; i < filasTabla.length; i++) {
             fila.push(filasTabla[i].children[inid].textContent);}
         if(fila.includes(codigo.value)){
-         mensajes("¡..YA HA SIDO AGREGADO ESTE USUARIO..!");  
+         /* mensajes("¡..YA HA SIDO AGREGADO ESTE USUARIO..!");  */
          if(users == "VEHICULOS_"){
-            tablaIngreso(codigo.value) 
+            tablaIngreso(codigo.value,0)
+            window.location.reload();
          }
         }else{localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));}  
     }   
@@ -206,4 +213,3 @@ tablaDataUsuarios1.innerHTML = prevUser1;
 let veh1 = localStorage.getItem("VEHICULOS_1");
 let prevVehiculo1 = JSON.parse(veh1)
 tablaDataVehiculos1.innerHTML = prevVehiculo1;
-
