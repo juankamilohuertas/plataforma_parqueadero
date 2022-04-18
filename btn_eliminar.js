@@ -17,7 +17,8 @@ if(tablaDataUsuarios.children.length != 0 || tablaDataVehiculos.children.length 
             localStorage.removeItem("VEHICULOS_");
             localStorage.removeItem("INGRESO");
             localStorage.setItem("FECHA", fechaActual);
-            localStorage.setItem("CONTEO", 0)
+            localStorage.setItem("CONTEO", 0);
+            localStorage.setItem("INGRESO_NOVEDAD", JSON.stringify(["S/N"]));
             }
             codigo.focus();
             window.location.reload();
