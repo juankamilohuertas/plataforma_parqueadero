@@ -91,15 +91,15 @@ const mostrandoInfo = (dataCode)=>{
 let turno;
 let colorTurno;
 const turnos = ()=>{
-    if(hora < 15){
-    turno = "SEGUNDO";
-    colorTurno = "#999900";
+    if(hora < 8 || hora >= 23){
+        turno = "PRIMERO";
+        colorTurno = "#922003";
+    }else if(hora < 15){
+        turno = "SEGUNDO";
+        colorTurno = "#999900";
     }else if(hora < 23){
-    turno = "TERCERO";
-    colorTurno = "#092274";
-    }else if(hora < 8){
-    turno = "PRIMERO";
-    colorTurno = "#922003";
+        turno = "TERCERO";
+        colorTurno = "#092274";
     }
 }
 // contenido de usuarios y vehiculos que se van a mostrar en el DOM;
@@ -141,39 +141,71 @@ const infoDataUsers = (res,users,tabla,inid)=>{
     }codigo.focus();  
 }
 
-/* INGRESO DE VEHICULOS */
+/* INGRESO DE VEHICULOS (HORA)*/
 let contCatualizado = localStorage.getItem("CONTEO");
 localStorage.setItem("CONTEO", contCatualizado);
 if(contCatualizado == 0){
     datosIngreso.style.display="none";
-    localStorage.setItem("INGRESO", JSON.stringify([null]))
+    localStorage.setItem("INGRESO_HORA", JSON.stringify([null]))
 }
-const tablaIngreso = (valor)=>{
+const tablaIngresoHora = (valor)=>{
     for (let i = 0; i < tablaDataVehiculos.children.length; i++) {
         if(tablaDataVehiculos.children[i].children[3].textContent.includes(valor)){
-            if(conver[i] == null || conver[i] == "SIN INGRESO"){
-                conver[i] = HoraIngreso; 
-                localStorage.setItem("INGRESO", JSON.stringify(conver))
+            if(converHora[i] == null || converHora[i] == "SIN INGRESO"){
+                converHora[i] = HoraIngreso; 
+                localStorage.setItem("INGRESO_HORA", JSON.stringify(converHora))
             }
         }     
     }
     localStorage.setItem("CONTEO", 1);
 }
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
+
+
+
+
+
+/* INGRESO DE VEHICULOS (NOVEDAD)*/
+
+setTimeout(()=>{
+    let novedades = [];
+    for (let i = 0; i < datosIngreso.children.length; i++) {
+        novedades.push(converNovedad[i]);
+        let novedad = datosIngreso.children[i].children[2].children[0];
+        novedad.addEventListener("change", ()=>{
+            novedades[i] = novedad.value;
+            localStorage.setItem("INGRESO_NOVEDAD", JSON.stringify(novedades))
+        })  
+    }
+},100);
+
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+
+
+
+
+
+
 /* MOSTRANDO EL INGRESO DE VEHICULOS EN EL DOM*/
-let info = localStorage.getItem("INGRESO");
-let conver = JSON.parse(info);
-if(conver != null){
-    for (let i = 0; i < conver.length; i++) {
-        if(conver[i] == null){
-            conver[i] = "SIN INGRESO";
-        }
+let infoHora = localStorage.getItem("INGRESO_HORA");
+let converHora = JSON.parse(infoHora);
+let dataNovedad = localStorage.getItem("INGRESO_NOVEDAD");
+let converNovedad = JSON.parse(dataNovedad);
+if(converHora != null){
+    for (let i = 0; i < converHora.length; i++) {
+        if(converHora[i] == null)converHora[i] = "SIN INGRESO";
+        if(converNovedad[i] == null)converNovedad[i] = "S/N";
+        
         datosIngreso.innerHTML += `
         <tr>
             <td>${fecha()}</td>
-            <td>${conver[i]}</td>
-            <td><input type="text" value="S/N"></td>
-        </tr>
-        `; 
+            <td>${converHora[i]}</td>
+            <td><input type="text" value="${converNovedad[i]}"></td>
+        </tr>`; 
     }
 }
 
@@ -193,7 +225,7 @@ const filaRepetida = (users,tabla,inid,dataTipo)=>{
         if(fila.includes(codigo.value)){
          /* mensajes("¡..YA HA SIDO AGREGADO ESTE USUARIO..!");  */
          if(users == "VEHICULOS_"){
-            tablaIngreso(codigo.value,0)
+            tablaIngresoHora(codigo.value,0)
             window.location.reload();
          }
         }else{localStorage.setItem(users, JSON.stringify(tabla.innerHTML += dataTipo));}  
