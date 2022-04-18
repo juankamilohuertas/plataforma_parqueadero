@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/estilos.css">
     <title>Document</title>
+    <script src="/table2excel.js"></script>
 </head>
 <body style="background-color: rgb(128, 128, 128);">
 <!-- mensaje -->
@@ -25,7 +26,7 @@
 <!-- boton de borar tabla #0 -->
 <button id="btn_eliminar_todo">BORAR TABLA</button>
 <!-- tablas #0 de la informacion que me arroja el codigo de barras -->
-<div id="conte_tablas" class="conte_tablas">
+<div id="tablas" class="conte_tablas">
     <table class="tablaUser" border="1">
         <thead><tr><td>TURNO</td><td>FECHA</td><td>HORA</td><td>GR</td>
             <td>NOMBRES Y APELLIDOS</td><td>PLACA</td></tr>   
@@ -34,7 +35,7 @@
     </table>
     <table class="tablaUser" border="1">
         <thead><tr><td>DESTINO</td><td>VEHICULO</td>
-                <td>SIGLA</td><td>PLACA DE VEHICULO</td>
+                <td>SIGLA</td><td>PLACA DE VEHICULO</td></tr>
         </thead>
         <tbody id="datos_vehiculo" class="columnas_vehiculo"></tbody>
     </table>
@@ -68,8 +69,7 @@
 
 
 <!-- boton para descargar las tablas -->
-<p id="tabla">contenido</p>
-<a href="#tabla" download="tabla.xls">descargar</a>
+<button id="btn_descargar">descargar</button>
 <script>
     /* mensaje que arroja la lectura del codigo de Barras */
     const mensajes = (mensaje)=>{
@@ -79,6 +79,12 @@
         },2000)
         document.getElementById("ya_existe").innerHTML = mensaje;
     }
+    /* descargar button */
+    const btnDescargar = document.getElementById("btn_descargar");
+    btnDescargar.addEventListener("click", ()=>{
+        let table2excel = new Table2Excel();
+        table2excel.export(document.querySelectorAll("#tablas"));
+    })
 </script>
 <script src="/registrar.js"></script>
 <script src="/data_form.js"></script>
