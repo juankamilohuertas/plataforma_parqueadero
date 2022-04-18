@@ -17,6 +17,7 @@ if(tablaDataUsuarios.children.length != 0 || tablaDataVehiculos.children.length 
             localStorage.removeItem("VEHICULOS_");
             localStorage.removeItem("INGRESO");
             localStorage.setItem("FECHA", fechaActual);
+            localStorage.setItem("CONTEO", 0)
             }
             codigo.focus();
             window.location.reload();
@@ -68,5 +69,3 @@ if(dias.getHours() == 23 ){
 }
 
 /* CREAR NUEVA TABLA */
-
-
