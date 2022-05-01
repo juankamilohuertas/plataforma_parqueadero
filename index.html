@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/estilos.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <title>Document</title>
     <script src="/table2excel.js"></script>
 </head>
@@ -25,19 +26,35 @@
 <div id="msj_time_eliminar_data"></div>
 <!-- boton de borar tabla #0 -->
 <button id="btn_eliminar_todo">BORAR TABLA</button>
+<!-- radioButtons de ingreso o salida -->
+<div>
+    <input type="radio" name="ingresoOsalida" id="ingreso">
+    <label for="ingreso">Ingreso</label>
+    <input type="radio" name="ingresoOsalida" id="salida">
+    <label for="salida">Salida</label>
+</div>
+<!-- tabla 1 o 2 activada -->
+<div>
+    <input type="checkbox" id="tablaActiva">
+    <label for="tablaActiva">Tabla 2 Activa</label>
+</div>
 <!-- tablas #0 de la informacion que me arroja el codigo de barras -->
 <div id="tablas" class="conte_tablas">
-    <table class="tablaUser" border="1">
+    <table class="tablaUser" class="table table-dark table-hover" border="1">
         <thead><tr><td>TURNO</td><td>FECHA</td><td>HORA</td><td>GR</td>
             <td>NOMBRES Y APELLIDOS</td><td>PLACA</td></tr>   
-        </thead>
-        <tbody id="datos_usuario" class="columnas_usuario"></tbody> 
+        </thead> 
+        <tbody id="segundo_turno_u" class="columnas_usuario1"></tbody>
+        <tbody id="tercer_turno_u" class="columnas_usuario2"></tbody>
+        <tbody id="primer_turno_u" class="columnas_usuario"></tbody>
     </table>
     <table class="tablaUser" border="1">
         <thead><tr><td>DESTINO</td><td>VEHICULO</td>
                 <td>SIGLA</td><td>PLACA DE VEHICULO</td></tr>
         </thead>
-        <tbody id="datos_vehiculo" class="columnas_vehiculo"></tbody>
+        <tbody id="segundo_turno_v" class="columnas_vehiculo1"></tbody>
+        <tbody id="tercer_turno_v" class="columnas_vehiculo2"></tbody>
+        <tbody id="primer_turno_v" class="columnas_vehiculo"></tbody>
     </table>
     <table class="tablaUser" border="1">
         <thead>
@@ -46,6 +63,8 @@
                 <td>NOVEDAD</td></tr>
             </tr>
         </thead>
+        <tbody id="datos_ingreso_1" class="columnas_ingreso1"></tbody>
+        <tbody id="datos_ingreso_2" class="columnas_ingreso2"></tbody>
         <tbody id="datos_ingreso" class="columnas_ingreso"></tbody>
     </table>
 </div>
@@ -57,13 +76,28 @@
         <thead><tr><td>TURNO</td><td>FECHA</td><td>HORA</td><td>GR</td>
             <td>NOMBRES Y APELLIDOS</td><td>PLACA</td></tr>   
         </thead>
-        <tbody id="datos_usuario1" class="columnas_usuario TablaUsuarios"></tbody>
+        <tbody id="segundo_turno1_u" class="columnas_usuario TablaUsuarios"></tbody>
+        <tbody id="tercer_turno1_u" class="columnas_usuario TablaUsuarios"></tbody>
+        <tbody id="primer_turno1_u" class="columnas_usuario TablaUsuarios"></tbody>
     </table>
     <table class="tablaUser1" border="1"><!-- tabla uno de vehiculos -->
         <thead><tr><td>DESTINO</td><td>VEHICULO</td>
             <td>SIGLA</td><td>PLACA DE VEHICULO</td></tr>
         </thead>
-        <tbody id="datos_vehiculo1" class="columnas_vehiculo"></tbody>
+        <tbody id="segundo_turno1_v" class="columnas_vehiculo"></tbody>
+        <tbody id="tercer_turno1_v" class="columnas_vehiculo"></tbody>
+        <tbody id="primer_turno1_v" class="columnas_vehiculo"></tbody>
+    </table>
+    <table class="tablaUser1" border="1">
+        <thead>
+            <tr>
+                <td>FECHA (I)</td><td>HORA (I)</td>
+                <td>NOVEDAD</td></tr>
+            </tr>
+        </thead>
+        <tbody id="datos_ingreso1_1" class="columnas_ingreso1"></tbody>
+        <tbody id="datos_ingreso1_2" class="columnas_ingreso2"></tbody>
+        <tbody id="datos_ingreso1" class="columnas_ingreso"></tbody>
     </table>
 </div>
 
@@ -75,7 +109,7 @@
     const mensajes = (mensaje)=>{
         setTimeout(()=>{
             mensaje = "";
-            window.location.reload(); 
+            window.location.reload();
         },2000)
         document.getElementById("ya_existe").innerHTML = mensaje;
     }
@@ -89,5 +123,15 @@
 <script src="/registrar.js"></script>
 <script src="/data_form.js"></script>
 <script src="/btn_eliminar.js"></script>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    
 </body>
 </html>
