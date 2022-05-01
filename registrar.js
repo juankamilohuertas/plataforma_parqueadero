@@ -24,15 +24,12 @@ const creandoFormRegistro = (gr,nombre,apellido,placa)=>{
     conte_form.innerHTML= form;
     validacionForm();
 }/* mostrando el formulario registro de la opcion escogida */
-let opc;
-let cantidadUser = localStorage.length;
 const mostrando_formulario =()=>{
    if(form_registro.value == 'usuario'){   
     creandoFormRegistro("GR","Nombre","Apellido","Placa");
    }else if(form_registro.value == 'vehiculo'){
     creandoFormRegistro("Destino","Vehiculo","Sigla","PlacaVehiculo");
     optVehiculos()}
-    opc = "KEY_"+cantidadUser;
 }
 /* opccion de vehiculos */
 let optElegida;
@@ -62,11 +59,13 @@ const validacionForm = ()=>{
        dataLocalS(arr); 
     });
 }/* validando y enviando los datos al  */
+let totalRegistrados = localStorage.getItem("registro_");
+let converRegistro = parseInt(totalRegistrados);
 const dataLocalS = (val)=>{
     if(val[0] && val[1] && val[2] && val[3] != ""){
         let arr = [];
         let registrados = [];
-          for (let i = 1; i < cantidadUser; i++) {
+          for (let i = 0; i < converRegistro; i++) {
                 let valo = localStorage.getItem("KEY_"+i);
                 arr.push(JSON.parse(valo));
             }
@@ -79,7 +78,8 @@ const dataLocalS = (val)=>{
             if(valor.length > 0){
                 alert("ya estas registrado");
             }else{
-                localStorage.setItem(opc,JSON.stringify(val));
+                localStorage.setItem("registro_", parseInt(totalRegistrados)+1)
+                localStorage.setItem(`KEY_${totalRegistrados}`,JSON.stringify(val));
                 window.location.reload();
             }
     }else{
